@@ -161,9 +161,28 @@ do
 while(strcmp(input,"exit")!=0);
 input[1]='\0';
 }
-//TODO complete function accept_license()
-void accept_license(char pcontents[lines][max_length]){}
-
+//mark accept_license()
+void accept_license(char pcontents[lines][max_length]){
+for(int i=0;i<lines;i++){
+search = strstr(pcontents[i],"ACCEPT_LICENSE");
+if(search!=NULL){break;}
+}
+if(search!=NULL){search=search+16;
+search[strlen(search)-1]=' ';
+}
+do
+{
+	printf("ACCEPT_LICENSE: ");
+	scanf("%s",input);
+	if(strlen(input)>30){printf("BUFFER OVERFLOW\n");exit(1);}
+	else if(strcmp(input,"list")==0){printf("\n%s\n\n",search);}
+	else if(strcmp(input,"exit")!=0){
+		action(input);
+	}
+}
+while(strcmp(input,"exit")!=0);
+input[1]='\0';
+}
 
 
 
@@ -216,8 +235,7 @@ do
 	if(strcmp(input,"USE")==0){use(contents);}
 	else if(strcmp(input,"VIDEO_CARDS")==0){video_cards(contents);}
 	else if(strcmp(input,"MAKEOPTS")==0){makeopts(contents);}
-	else if(strcmp(input,"ACCEPT_LICENSE")==0){
-		//accept_license(contents);
+	else if(strcmp(input,"ACCEPT_LICENSE")==0){accept_license(contents);
 	}
 	else if(strcmp(input,"help")==0||strcmp(input,"h")==0){help();}
 	else if(strcmp(input,"exit")!=0){printf("unrecognized; type 'help' to see availible commands\n");}
