@@ -177,8 +177,32 @@ do
 	if(strlen(input)>30){printf("BUFFER OVERFLOW\n");exit(1);}
 	else if(strcmp(input,"list")==0){printf("\n%s\n\n",search);}
 	else if(strcmp(input,"exit")!=0){
-		action(input);
-	}
+		if(strcmp(input, "GPL-COMPATIBLE")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"FSF-APPROVED")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"MISC-FREE")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"EULA")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"OSI-APPROVED")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"OSI-APPROVED-FREE")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"OSI-APPROVED-NONFREE")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"BINARY-REDISTRUTABLE")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"FSF-APPROVED-OTHER")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"MISC-FREE-DOCS")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"FREE")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"FREE-SOFTWARE")==0){action(input);printf("\n%s\n\n",search);}
+		else if(strcmp(input,"FREE-DOCUMENTS")==0){action(input);printf("\n%s\n\n",search);}
+		else{
+			printf("Flag not recognized\nUse it anyway?\n");
+			char option[20];
+			do{
+				printf("\n[y/n]: ");
+				scanf("%s",option);
+			}
+			while(strlen(option)!=1);
+			(strcmp(option,"y")==0) ? action(input) : printf("trashing...\n");
+			printf("\n%s\n\n",search);
+		}
+		//action(input); printf("should print\n");
+	}//printf("\n%s\n\n",search);
 }
 while(strcmp(input,"exit")!=0);
 input[1]='\0';
