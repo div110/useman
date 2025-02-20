@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 
 //TODO all to lower/upper case
@@ -13,6 +14,19 @@ int length=0;
 char * search;
 
 
+//mark upperlower
+void upperLower(char * pString,bool option){
+if(option==true){
+for(int i=0;i<strlen(pString);i++){pString[i]=toupper(pString[i]);}
+}
+else{
+for(int i=0;i<strlen(pString);i++){pString[i]=tolower(pString[i]);}
+}
+}
+
+
+
+//mark help
 void help(){
 printf("\nList of availible inputs:\nhelp - show this dialog\nUSE - USE Flag configuration mode\nVIDEO_CARDS - VIDEO_CARDS configuration mode\nMAKEOPTS - MAKEOPTS configuration mode\nACCEPT_LICENSE - ACCEPT_LICENSE configuration mode\nexit - exit program without saving changes\n\n");
 }
@@ -48,8 +62,15 @@ void action(char * name){
 				strcat(search,name_true);
 			//}
 			//printf("final:%s\n",search);
-			
+		//chyba	
 		}
+	char space_limit[4]={' ',' ',' ','\0'};
+	char * spaces = strstr(search,space_limit);
+	if(spaces!=NULL)
+	{
+	
+	}
+	
 	//printf("now should clense\n");	
 	
 
@@ -57,21 +78,6 @@ void action(char * name){
 	for(int i=0;i<sizeof(name_true);i++){name_true[i]='\0';}
 	//printf("after clense:/%s/\n",name_true);
 }
- ///////USE////////USE/////////USE/////////USE////////USE/////////USE/////////////////
-/////////////////////////////////////////////////////////////////////////////////////
-//void list(char category[4],char pcontents[lines][max_length])
-//{
-//char * search;
-//	for(int i=0;i<lines;i++)
-//	{
-//		search = strstr(pcontents[i],category);
-//		if(search!=NULL){break;}
-//	}
-//search=search+5;
-//search[strlen(search)-1]='\0';
-//printf("Found at: %p\n", search);
-//printf("Dereference: %s\n",search);
-//}
 
 //mark use
 void use(char pcontents[lines][max_length]){
@@ -91,11 +97,14 @@ do
 {
 	printf("USEconf: ");
 	scanf("%s",input);
+	upperLower(input,false);
 	if(strlen(input)>20){printf("BUFFER OVERFLOW\n");exit(1);}
 	else if(strcmp(input,"list")==0){printf("\n%s\n\n",search);}
-	else if(strcmp(input,"exit")!=0){action(input);printf("\n%s\n",search);}
+	else if(strcmp(input,"exit")!=0){action(input);printf("\n%s\n\n",search);}
 }
 while(strcmp(input,"exit")!=0);
+search[strlen(search)]='"';
+search[strlen(search)+1]='\0';
 input[1]='\0';
 }
  ////////////////////////////////////////////////////////////////////////////////////
@@ -118,11 +127,14 @@ do
 {
 	printf("MAKEOPTSconf: ");
 	scanf("%s",input);
+	upperLower(input,false);
 	if(strlen(input)>20){printf("BUFFER OVERFLOW\n");exit(1);}
 	else if(strcmp(input, "list")==0){printf("\n%s\n\n",search);}
-	else if(strcmp(input,"exit")!=0){action(input);printf("\n%s\n",search);}
+	else if(strcmp(input,"exit")!=0){action(input);printf("\n%s\n\n",search);}
 }
 while(strcmp(input,"exit")!=0);
+search[strlen(search)]='"';
+search[strlen(search)+1]='\0';
 input[1]='\0';
 }
 
@@ -140,7 +152,7 @@ do
 {
 	printf("VIDEO_CARDS: ");
 	scanf("%s",input);
-	
+	upperLower(input,false);
 	if(strlen(input)>20){printf("BUFFER OVERFLOW\n");exit(1);}
 	else if(strcmp(input, "list")==0){printf("\n%s\n\n",search);}
 	
@@ -159,6 +171,8 @@ do
 		printf("\n%s\n\n",search);}
 }
 while(strcmp(input,"exit")!=0);
+search[strlen(search)]='"';
+search[strlen(search)+1]='\0';
 input[1]='\0';
 }
 //mark accept_license()
@@ -174,9 +188,10 @@ do
 {
 	printf("ACCEPT_LICENSE: ");
 	scanf("%s",input);
+	upperLower(input,true);
 	if(strlen(input)>30){printf("BUFFER OVERFLOW\n");exit(1);}
-	else if(strcmp(input,"list")==0){printf("\n%s\n\n",search);}
-	else if(strcmp(input,"exit")!=0){
+	else if(strcmp(input,"LIST")==0){printf("\n%s\n\n",search);}
+	else if(strcmp(input,"EXIT")!=0){
 		if(strcmp(input, "GPL-COMPATIBLE")==0){action(input);printf("\n%s\n\n",search);}
 		else if(strcmp(input,"FSF-APPROVED")==0){action(input);printf("\n%s\n\n",search);}
 		else if(strcmp(input,"MISC-FREE")==0){action(input);printf("\n%s\n\n",search);}
@@ -204,7 +219,9 @@ do
 		//action(input); printf("should print\n");
 	}//printf("\n%s\n\n",search);
 }
-while(strcmp(input,"exit")!=0);
+while(strcmp(input,"EXIT")!=0);
+search[strlen(search)]='"';
+search[strlen(search)+1]='\0';
 input[1]='\0';
 }
 
@@ -219,8 +236,8 @@ FILE *file;
 file = fopen("/etc/portage/make.conf","r");
 char buf[100000];
 fscanf(file,"%[^#]",buf);
-printf("%s\n", buf);
-
+printf("buffer: \n%s\n", buf);
+fclose(file);
 lines=0;
 length=0;
 max_length=0;
@@ -255,18 +272,35 @@ do
 	{
 	printf("tool: ");
 	scanf("%s",input);
+	upperLower(input,true);
 	if(strlen(input)>20){printf("BUFFER OVERFLOW\n");exit(1);}
 	if(strcmp(input,"USE")==0){use(contents);}
 	else if(strcmp(input,"VIDEO_CARDS")==0){video_cards(contents);}
 	else if(strcmp(input,"MAKEOPTS")==0){makeopts(contents);}
 	else if(strcmp(input,"ACCEPT_LICENSE")==0){accept_license(contents);
 	}
-	else if(strcmp(input,"help")==0||strcmp(input,"h")==0){help();}
-	else if(strcmp(input,"exit")!=0){printf("unrecognized; type 'help' to see availible commands\n");}
+	else if(strcmp(input,"HELP")==0||strcmp(input,"H")==0){help();}
+	else if(strcmp(input,"EXIT")!=0){printf("unrecognized; type 'help' to see availible commands\n");}
 	}
-	while(strcmp(input,"exit")!=0); //this is stupid non-sense
+	while(strcmp(input,"EXIT")!=0); //this is stupid non-sense
 
 
+
+for(int n=0;n<strlen(buf);n++){buf[n]='\0';}
+int loko=0;
+for(int i=0;i<lines;i++){
+
+
+	for(int j=0;j<max_length;j++){
+		if(contents[i][j]=='\0')
+			
+			{buf[loko]='\n';j=max_length;printf("\n");}
+		
+		else{buf[loko]=contents[i][j];printf("%c",contents[i][j]);}
+	loko++;
+	}
+}
+printf("\n\n\n\n\n\n%s",buf);
 
 
 return 0;}
