@@ -66,9 +66,15 @@ void action(char * name){
 		}
 	char space_limit[4]={' ',' ',' ','\0'};
 	char * spaces = strstr(search,space_limit);
+	//char * after_spaces = spaces+strlen(space_limit);
 	if(spaces!=NULL)
 	{
-	
+		char * after_spaces = spaces+strlen(space_limit);
+
+		for(int i=0; i<(strlen(after_spaces)+3);i++)
+		{
+		spaces[i]=after_spaces[i-2];
+		}
 	}
 	
 	//printf("now should clense\n");	
@@ -76,7 +82,7 @@ void action(char * name){
 
 	//cleaning name_true
 	for(int i=0;i<sizeof(name_true);i++){name_true[i]='\0';}
-	//printf("after clense:/%s/\n",name_true);
+
 }
 
 //mark use
@@ -246,7 +252,7 @@ for(int i=0;i<strlen(buf);i++){
 	if(buf[i]=='\n'){lines++;length=0;}
 	if(length>max_length){max_length=length;}
 }
-max_length = 2 * max_length;
+max_length = 2 * (max_length+200);
 char contents[lines][max_length];
 
 
